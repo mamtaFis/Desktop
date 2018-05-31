@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Test"
+           tests="3"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="49.698">
+  <properties />
+  
+  
+            <testcase name="closeApp" time="0.086" classname="tests.VerifyLogin" />
+                <testcase name="verifyLogin" time="40.226" classname="tests.VerifyLogin" />
+                <testcase name="verify_SD" time="9.386" classname="tests.VerifyLogin" />
+      
+</testsuite>
