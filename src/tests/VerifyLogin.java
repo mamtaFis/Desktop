@@ -1,9 +1,12 @@
+//test controlled by mamta gupta
+
 package tests;
 
 import java.awt.AWTException;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,6 +32,7 @@ import pages.homeScreen_online;
 import pages.txn_searchPage;
 import pages.welcomeToMiser_loginScreen;
 import pages.welcome_Login;
+import utilities.ExcelMethods;
 import utilities.captureScreen;
 import utilities.common_buttons;
 import utilities.excelReading;
@@ -37,30 +41,31 @@ public class VerifyLogin {
 
 	
 
+	common_buttons wait = new common_buttons(base.Driver);
 	
 
 	@Test(priority=1)
 	public void a_verifyLogin() throws InterruptedException, IOException {
 		System.out.println("First method execution");
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver.exe");
-
+		
 		
 		base.Driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		base.Driver.manage().window().maximize();
 		base.Driver.get("http://E3019815:Shivbaba@5@mdtdeskgenp.fisstaging.local/miserteller?ClientComputerName=DEL1-LTC1X3PH2");
 		welcomeToMiser_loginScreen wc = new welcomeToMiser_loginScreen(base.Driver);
-		// wc.setUserID("e3019815");
+		
 		wc.ClickSubmitBtn();
 		welcome_Login login = new welcome_Login(base.Driver);
 		//login.verifyLoginScreen();
 		login.enterCashBox("9999");
-		 Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		login.clickSignOnBtn();
 		homeScreen_online home = new homeScreen_online(base.Driver);
 		captureScreen capture = new captureScreen(base.Driver);
 		capture.captureScreenshot("HomeScreenView");
-		Thread.sleep(4000);
-		home.clickBusinessView();
+		
+		wait.waitUntilElementisvisible();
+		//home.clickBusinessView();
 		//home.verifyLogin();
 		capture.captureScreenshot("UserloggedIn");
 		// home.clickSignOff();
@@ -72,65 +77,65 @@ public class VerifyLogin {
 	public void verify_SD() throws IOException, InterruptedException {
 		System.out.println("third method execution");
 		txn_searchPage txn_search = new txn_searchPage(base.Driver);
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		txn_search.enter_txn_no("SD");
 		SD_Menu_Page SD_menu = new SD_Menu_Page(base.Driver);
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		SD_menu.verifyTxn();
 		captureScreen capture = new captureScreen(base.Driver);
 		capture.captureScreenshot("SD_menu_View");
 		SD_menu.click_SD04();
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 
 		SD04_page txn_page = new SD04_page(base.Driver);
-		txn_page.verifyTxn_Title();
-
+		String title = txn_page.verifyTxn_Title();
+		
 		capture.captureScreenshot("Transaction_9411_View");
 		excelReading reading = new excelReading();
-		//reading.readExcel(driver, str1, str2, filepath, sheetName);
 		txn_page.enter_BoxNo("1");
 		txn_page.Click_SubmitBtn();
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		SD04_TransactionResponse_page response = new SD04_TransactionResponse_page(base.Driver);
 		response.verifyTxn_response();
-		Thread.sleep(2000);
+		wait.waitUntilElementisvisible();
 		capture.captureScreenshot("Transaction_response");
 		response.click_first_row();
 		base.Driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		response.click_CloseBtn();
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		System.out.println("Third method execution has been stopped");
 	}
 
-/*@Test(priority=4)
+@Test(priority=4)
 	public void verifyReturnBoxToServicePage() throws InterruptedException {
 		System.out.println("Fourth method execution");
-		ReturnBoxToService returnBox = new ReturnBoxToService(driver);
-		txn_searchPage txn_search = new txn_searchPage(driver);
+		ReturnBoxToService returnBox = new ReturnBoxToService(base.Driver);
+		txn_searchPage txn_search = new txn_searchPage(base.Driver);
 		txn_search.enter_txn_no("SD27");
-		Thread.sleep(5000);
+		wait.waitUntilElementisvisible();
 		returnBox.enterOriginalBoxNumber("45");
-		Thread.sleep(3000);
-		common_buttons buttons = new common_buttons(driver);
+		wait.waitUntilElementisvisible();
+		common_buttons buttons = new common_buttons(base.Driver);
 		buttons.clickSubmitBtn();
 		returnBox.verifyResponse();
 		System.out.println("Fourth method execution has been stopped");
 
-	}*/
+	}
 
-	/*@Test(priority=5)
-	public void b_verifyMiscellaneousChargeAndReversal() throws InterruptedException
+	@Test(priority=5)
+	public void verifyMiscellaneousChargeAndReversal() throws InterruptedException
 	{
 		System.out.println("Fifth method execution");
-		txn_searchPage txn_search = new txn_searchPage(driver);
+		txn_searchPage txn_search = new txn_searchPage(base.Driver);
 		
 		txn_search.enter_txn_no("SD30");
-		common_buttons buttons = new common_buttons(driver);
-		MiscellaneousChargeAndReversal reversal = new MiscellaneousChargeAndReversal(driver);
-		Thread.sleep(4000);
+		common_buttons buttons = new common_buttons(base.Driver);
+		MiscellaneousChargeAndReversal reversal = new MiscellaneousChargeAndReversal(base.Driver);
+		wait.waitUntilElementisvisible();
 		reversal.clearBranchNumber();
+		wait.waitUntilElementisvisible();
 		buttons.clickSubmitBtn();
-		Thread.sleep(4000);
+		wait.waitUntilElementisvisible();
 		reversal.verifyErrorMessages();
 			
 		reversal.enterBranchNumber("001");
@@ -139,72 +144,59 @@ public class VerifyLogin {
 		buttons.clickSubmitBtn();
 		reversal.verifyRevesalScreen();
 		reversal.selectTransaction();
-		Thread.sleep(5000);
+		wait.waitUntilElementisvisible();
 		reversal.enterTransactionAmount();
 		buttons.clickSubmitBtn();
-		Thread.sleep(6000);
+		wait.waitUntilElementisvisible();
 		reversal.verifyTransactionAccepted();
 		buttons.clickPreviewBtn();
-		Thread.sleep(5000);
+		wait.waitUntilElementisvisible();
 		buttons.clickPreviewPopupCloseBtn();
-		Thread.sleep(3000);
+		wait.waitUntilElementisvisible();
 		buttons.clickCloseBtn();
 		System.out.println("fifth method execution has been stopped");
 		
 		
 	}
-	*/
-	/*@Test(priority=6)
+	
+	@Test(priority=6)
 	public void c_verifyDupWithData() throws InterruptedException, AWTException
 	{
 		System.out.println("sixth method execution");
 		System.out.println("Going to start execution of third method");
-		common_buttons buttons = new common_buttons(driver);
-		Thread.sleep(5000);
+		common_buttons buttons = new common_buttons(base.Driver);
+		wait.waitUntilElementisvisible();
 		buttons.verifyHomeScreen();
 		buttons.clickDupWithoutDataBtn();
-		MiscellaneousChargeAndReversal reversal = new MiscellaneousChargeAndReversal(driver);
+		MiscellaneousChargeAndReversal reversal = new MiscellaneousChargeAndReversal(base.Driver);
 		reversal.verifyDupWithoutDataBtn();
 		System.out.println("dup without data verified");
-		Thread.sleep(4000);
+		wait.waitUntilElementisvisible();
 		buttons.clickDupWithDataBtn();
 		reversal.verifyDupWithDataBtn();
 		reversal.verifyDupWithDataContent();
-		Thread.sleep(8000);
-		UtilitiesMenu menu = new UtilitiesMenu(driver);
+		wait.waitUntilElementisvisible();
+		UtilitiesMenu menu = new UtilitiesMenu(base.Driver);
 		System.out.println("going to click on journal summary shortcut ");
 		menu.clickJouranlSummary();
 		System.out.println("journal summary has been opened up");
 		
 		
 		
-	}*/
+	}
 	
-	/*@Test(priority=7)
-	public void transactionSubmissionInClient() throws InterruptedException
-	{
-		System.out.println("seventh method working has started");
-		
-		common_buttons buttons = new common_buttons(driver);
-		buttons.searchClient();
-		buttons.clickSearchClientBtn();
-		System.out.println("client session  opening up");
-		Thread.sleep(8000);
-		txn_searchPage txn = new txn_searchPage(driver);
-		//txn.enter_txn_no("0107");
+	
 
-		System.out.println("seventh method working has stoped");
-	}*/
-
-	/*@Test
-	public void closeApp() throws IOException {
+	@Test(priority=7)
+	public void closeApp() throws IOException, InterruptedException {
 		 System.out.println("going to execute second mthod");
-		homeScreen_online home = new homeScreen_online(driver);
+		homeScreen_online home = new homeScreen_online(base.Driver);
+		wait.waitUntilElementisvisible();
 		home.clickSignOff();
-		captureScreen capture = new captureScreen(driver);
+		captureScreen capture = new captureScreen(base.Driver);
 		capture.captureScreenshot("SignOff_confirmationScreen");
 		
-	}*/
+	}
 
 	
 	
